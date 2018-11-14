@@ -6,7 +6,7 @@
   "scripts": {
     "copy-bootstrap": "cpx ./node_modules/bootstrap/dist/css/bootstrap.css dist/ && cpx ./node_modules/bootstrap/dist/js/bootstrap.js dist/",
     "copy-jquery": "cpx ./node_modules/jquery/dist/jquery.js dist/",
-    "build": "cpx *.{html,css} dist/ && npm run copy-bootstrap && npm run copy-jquery",
+    "build": "cpx *.{html,css} dist/ && npm run copy-bootstrap && npm run copy-jquery && tsc dist/app.ts",
     "start": "browser-sync start -c bs-config.js"
   },
   "author": "Rainer Stropek",
@@ -16,7 +16,9 @@
     "jquery": "^3.3.1"
   },
   "devDependencies": {
+    "@types/jquery": "^3.3.22",
     "browser-sync": "^2.26.3",
-    "cpx": "^1.5.0"
+    "cpx": "^1.5.0",
+    "typescript": "^3.1.6"
   }
 }
