@@ -5,7 +5,6 @@ $(document).ready(function () {
     var errorLastNameID = "#lastNameMandatory";
     var mailID = "#email";
     var errorMailID = "#emailMandatory";
-    var mailLabel = "#email";
     var selectID = "#mediaChannelSelect";
     var otherOption = "Other";
     var otherID = "#otherMediaChannel";
@@ -14,29 +13,21 @@ $(document).ready(function () {
     checkVisibleError();
     displayOther();
     displayMail();
-    $(firstNameID).on("input", function () {
-        var empty = isEmpty(firstNameID);
-        if (empty) {
-            showError(errorFirstNameID);
-        }
-        else {
-            hideError(errorFirstNameID);
-        }
-        checkVisibleError();
-    });
-    $(lastNameID).on("input", function () {
-        var empty = isEmpty(lastNameID);
-        if (empty) {
-            showError(errorLastNameID);
-        }
-        else {
-            hideError(errorLastNameID);
-        }
-        checkVisibleError();
-    });
+    $(firstNameID).on("input", function () { return toggleInputError(firstNameID, errorFirstNameID); });
+    $(lastNameID).on("input", function () { return toggleInputError(lastNameID, errorLastNameID); });
     $(mailID).on("input", function () { return displayMailError(); });
     $(selectID).change(function () { return displayOther(); });
     $(newsletterID).change(function () { return displayMail(); });
+    function toggleInputError(inputID, inputErrorID) {
+        var empty = isEmpty(inputID);
+        if (empty) {
+            showError(inputErrorID);
+        }
+        else {
+            hideError(inputErrorID);
+        }
+        checkVisibleError();
+    }
     function displayOther() {
         if (isOtherSelected(selectID)) {
             $(otherID).show();
@@ -46,18 +37,18 @@ $(document).ready(function () {
         }
     }
     function displayMail() {
-        if (isNewsletterChecked()) {
-            showMailContent();
-        }
-        else {
-            hideMailContent();
-        }
+        displayMailError();
         checkVisibleError();
     }
     function displayMailError() {
-        var empty = isEmpty(mailID);
-        if (empty) {
-            showError(errorMailID);
+        if (isNewsletterChecked()) {
+            var empty = isEmpty(mailID);
+            if (empty) {
+                showError(errorMailID);
+            }
+            else {
+                hideError(errorMailID);
+            }
         }
         else {
             hideError(errorMailID);
@@ -69,11 +60,9 @@ $(document).ready(function () {
     }
     function isOtherSelected(id) {
         var value = $(id).val().toString();
-        console.log(value);
         return value === otherOption;
     }
     function isEmpty(id) {
-        console.log(id);
         return $(id).val() === "";
     }
     function showError(id) {
@@ -81,16 +70,6 @@ $(document).ready(function () {
     }
     function hideError(id) {
         $(id).hide();
-    }
-    function hideMailContent() {
-        $(mailID).hide();
-        $(mailLabel).hide();
-        $(errorMailID).hide();
-    }
-    function showMailContent() {
-        $(mailID).show();
-        $(mailLabel).show();
-        displayMailError();
     }
     function checkVisibleError() {
         var firstNameErrorHidden = $(errorFirstNameID).is(":hidden");

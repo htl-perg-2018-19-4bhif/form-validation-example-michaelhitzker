@@ -1,52 +1,39 @@
 $(document).ready(function() {
     const firstNameID = "#firstName";
     const errorFirstNameID = "#firstNameMandatory";
-
     const lastNameID = "#lastName";
     const errorLastNameID = "#lastNameMandatory";
-
     const mailID = "#email";
     const errorMailID ="#emailMandatory";
-    const mailLabel = "#email";
-
     const selectID = "#mediaChannelSelect"
     const otherOption = "Other";
-
     const otherID = "#otherMediaChannel";
-
     const newsletterID = "#newsletter";
-
     const submitBtn = ".btn";
 
     checkVisibleError();
     displayOther();
     displayMail();
 
-    $(firstNameID).on("input", function(){
-        const empty = isEmpty(firstNameID)
-        if(empty){
-            showError(errorFirstNameID);
-        }else{
-            hideError(errorFirstNameID);
-        }
-        checkVisibleError();
-    });
+    $(firstNameID).on("input",() => toggleInputError(firstNameID, errorFirstNameID));
 
-    $(lastNameID).on("input", function(){
-        const empty = isEmpty(lastNameID)
-        if(empty){
-            showError(errorLastNameID);
-        }else{
-            hideError(errorLastNameID);
-        }
-        checkVisibleError();
-    });
+    $(lastNameID).on("input",() => toggleInputError(lastNameID, errorLastNameID));
 
     $(mailID).on("input", () => displayMailError());
 
     $(selectID).change(()=> displayOther());
 
-    $(newsletterID).change(() => displayMail())
+    $(newsletterID).change(() => displayMail());
+
+    function toggleInputError(inputID: string, inputErrorID: string){
+        const empty = isEmpty(inputID);
+        if(empty){
+            showError(inputErrorID);
+        }else{
+            hideError(inputErrorID);
+        }
+        checkVisibleError();
+    }
 
     function displayOther(){
         if(isOtherSelected(selectID)){
@@ -57,18 +44,18 @@ $(document).ready(function() {
     }
 
     function displayMail(){
-        if(isNewsletterChecked()){
-            showMailContent();
-        }else{
-           hideMailContent();
-        }
+        displayMailError();
         checkVisibleError();
     }
 
     function displayMailError(){
-        const empty = isEmpty(mailID)
-        if(empty){
-            showError(errorMailID);
+        if(isNewsletterChecked()){
+            const empty = isEmpty(mailID);
+            if(empty){
+                showError(errorMailID);
+            }else{
+                hideError(errorMailID);
+            }
         }else{
             hideError(errorMailID);
         }
@@ -96,24 +83,10 @@ $(document).ready(function() {
         $(id).hide();
     }
 
-    function hideMailContent(){
-        $(mailID).hide();
-        $(mailLabel).hide();
-        $(errorMailID).hide();
-    }
-
-    function showMailContent(){
-        $(mailID).show();
-        $(mailLabel).show();
-        
-        displayMailError();
-
-    }
-
     function checkVisibleError(){
         const firstNameErrorHidden = $(errorFirstNameID).is(":hidden"); 
         const lastNameErrorHidden = $(errorLastNameID).is(":hidden"); 
-        const mailErrorHidden = $(errorMailID).is(":hidden"); 
+        const mailErrorHidden = $(errorMailID).is(":hidden") ; 
 
         const submitCanBeVisible = (firstNameErrorHidden && lastNameErrorHidden && mailErrorHidden);
 
